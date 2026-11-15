@@ -1,8 +1,7 @@
-import { cacheLife } from "next/cache";
 import { site } from "@/data/site";
 
 /**
- * Public GitHub data, cached for an hour. Nothing here is ever invented: if a
+ * Public GitHub data, fetched at build time. Nothing here is ever invented: if a
  * request fails, the caller gets `null` and renders an honest fallback.
  *
  * Set GITHUB_TOKEN (no scopes needed) to raise rate limits and unlock the
@@ -137,7 +136,6 @@ function toActivity(e: RawEvent): ActivityItem | null {
 }
 
 export async function getGitHubSnapshot(): Promise<GitHubSnapshot | null> {
-  "use cache";
   const user = site.githubUser;
 
   try {
@@ -149,8 +147,6 @@ export async function getGitHubSnapshot(): Promise<GitHubSnapshot | null> {
       ),
       fetchCalendar(user).catch(() => null),
     ]);
-
-    cacheLife("hours");
 
     const original = repos.filter((r) => !r.fork && r.size > 0 && r.name !== user);
 
@@ -207,8 +203,6 @@ export async function getGitHubSnapshot(): Promise<GitHubSnapshot | null> {
       calendar,
     };
   } catch {
-    // Don't hold on to a failure for long.
-    cacheLife("minutes");
     return null;
   }
 }

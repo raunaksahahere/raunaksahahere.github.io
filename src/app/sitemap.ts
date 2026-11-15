@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+
 import type { MetadataRoute } from "next";
 import { featuredOrder } from "@/data/projects";
 import { site } from "@/data/site";

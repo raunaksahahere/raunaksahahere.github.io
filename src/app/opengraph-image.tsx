@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+export const dynamic = "force-static";
+
 export const alt = "Raunak Saha — I build things that probably shouldn't exist yet.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
