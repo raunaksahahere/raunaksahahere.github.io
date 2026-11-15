@@ -5,8 +5,9 @@ a cream paper background, a hand-drawn robot and desk scene, sticker-style cards
 spread with real screenshots, a toolbox that shows where each tool was used, live GitHub activity,
 a draggable pinboard, and a resume sticker that follows you down the page.
 
-It is built with Next.js (App Router), TypeScript, Tailwind CSS 4, Motion and Lucide. Nearly all
-of your content lives in three data files, so you can make it yours without touching the layout.
+It is built with Next.js (App Router, static export), TypeScript, Tailwind CSS 4, Motion and Lucide.
+Nearly all of your content lives in three data files, so you can make it yours without touching the layout.
+It deploys to GitHub Pages as a fully static site.
 
 > You don't need to be a designer to use this. Replace the content, keep the system, and the
 > result will still look intentional.
@@ -20,9 +21,13 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-Requirements: Node.js 20.9 or newer.
+Requirements: Node.js 20.9 or newer (the deploy workflow uses Node 22).
 
 Check that it runs before you change anything. Then make the changes in the order below.
+
+If you want the site at `https://<you>.github.io`, name the repository `<you>.github.io`. That is a
+user site, so no `basePath` is needed. Any other name makes a project site at
+`https://<you>.github.io/<repo>`, and you would then need to add `basePath` to `next.config.ts`.
 
 ## 2. Change the identity (`src/data/site.ts`)
 
@@ -37,7 +42,7 @@ This file holds your name, contact details and links. Everything else reads from
 | `githubUser` | Your GitHub username. The activity section reads your public data from this account. |
 | `socials` | GitHub and LinkedIn URLs. Remove an entry (and its icon in `hero.tsx`, `contact.tsx`, `footer.tsx`) if you don't use it. |
 | `resume.href`, `resume.fileName` | Where your resume PDF lives and what the download is named (see step 5). |
-| `url` | Set `NEXT_PUBLIC_SITE_URL` in production. Locally it falls back to `http://localhost:3000`. |
+| `url` | Your public address. The deploy workflow sets `NEXT_PUBLIC_SITE_URL` to it (see step 10). Locally it falls back to `http://localhost:3000`. |
 
 `navLinks` in the same file controls the section links in the top bar. They must match section `id`s
 on the home page (`work`, `about`, `toolbox`, `activity`, `contact`).
@@ -145,23 +150,30 @@ The palette and type are small on purpose.
 
 ## 8. GitHub activity
 
-`src/lib/github.ts` fetches your public profile, repositories and events from the GitHub API,
-cached for an hour. It works without a token, but a token raises rate limits and shows the full
-contribution calendar:
+`src/lib/github.ts` fetches your public profile, repositories and events from the GitHub API
+**when the site is built**. The static site is a snapshot, so the deploy workflow rebuilds it on every
+push and once a day to keep these numbers fresh.
+
+It works without a token, but a token raises the API rate limit and enables the full-year
+contribution calendar (that part of the API needs a token):
 
 1. Create a fine-grained token at https://github.com/settings/tokens with no permissions.
-2. Add it as `GITHUB_TOKEN` in `.env.local` (locally) or in your hosting dashboard.
+2. In your repository, go to **Settings → Secrets and variables → Actions** and add it as a secret
+   named `PORTFOLIO_GITHUB_TOKEN`. Don't name it `GITHUB_TOKEN`, because GitHub reserves that name.
+3. In `.github/workflows/pages.yml`, add this line under the **Build static site** step's `run`:
+   `env: { GITHUB_TOKEN: ${{ secrets.PORTFOLIO_GITHUB_TOKEN }} }`.
+   For local builds, put `GITHUB_TOKEN=...` in `.env.local`.
 
-If GitHub doesn't answer, the section says so rather than showing numbers. That behaviour is intentional.
-Keep it.
+If GitHub doesn't answer during the build, the section says so rather than showing numbers. That
+behaviour is intentional. Keep it.
 
 ## 9. Check before you publish
 
 ```bash
 npm run lint
 npx tsc --noEmit
-npm run build
-npm run start      # then look at it on a phone-sized window too
+npm run build      # writes a static site to out/
+npx serve out      # any static file server works; then open the printed URL
 ```
 
 Then check:
@@ -174,14 +186,33 @@ Then check:
   "CodeMeet" to make sure you've removed every example.
 - Reduced-motion works: turn on "reduce motion" in your OS and reload.
 
-## 10. Deploy
+## 10. Deploy to GitHub Pages
 
-On Vercel: import the repository, leave the framework preset on Next.js, then set:
+The repository includes `.github/workflows/pages.yml`, which builds the site and publishes `out/`.
 
-- `NEXT_PUBLIC_SITE_URL` to your domain (for sitemap, canonical URLs and share previews).
-- `GITHUB_TOKEN` (optional).
+1. Push the repository to GitHub.
+2. Go to **Settings → Pages** and set **Source** to **GitHub Actions**.
+3. Push to `main` (or run the workflow from the Actions tab). The first deploy takes a minute or two.
+4. Open `https://<you>.github.io/`.
 
-Vercel builds it on every push. Add your domain under Project → Domains.
+The workflow runs on every push to `main`, on manual trigger, and daily at 03:17 UTC to refresh the
+GitHub activity section.
+
+**Your public URL:** the workflow sets `NEXT_PUBLIC_SITE_URL: https://<you>.github.io`. Change it there
+if you use a different address. It's used for the sitemap, canonical links and share previews.
+
+**Custom domain (optional):** add it under **Settings → Pages → Custom domain** and set your DNS
+records as GitHub describes. Then change `NEXT_PUBLIC_SITE_URL` in the workflow to the domain.
+
+**What static export means for you:**
+
+- The site has no server. Everything is built into `out/` ahead of time.
+- Project case-study pages are generated only for slugs in `featuredOrder`. To feature a new project,
+  add its slug there and push. A rebuild is required for any content change.
+- Images are not optimised by Next.js (GitHub Pages can't run the optimiser), so export your screenshots
+  at the size you want shown (step 3).
+- Anything that needs a server at request time (forms that store data, personalised pages) won't work.
+  Use an external form service or a `mailto:` link instead.
 
 ## Project structure
 
@@ -198,10 +229,12 @@ src/
     site.ts            identity, links, resume, nav
     projects.ts        your projects and which ones are featured
     toolbox.ts         your technologies
-  lib/github.ts        cached GitHub data
+  lib/github.ts        build-time GitHub data
 public/
   projects/            screenshots (WebP)
   resume/              your resume PDF
+.github/workflows/
+  pages.yml            build and deploy to GitHub Pages
 ```
 
 ## Making it fully yours: a checklist
@@ -214,8 +247,10 @@ public/
 - [ ] Hero, Selected work, About, pinboard and contact copy rewritten
 - [ ] Colours and fonts adjusted (or left as they are)
 - [ ] Illustrations kept or replaced
-- [ ] `lint`, `tsc` and `build` pass
-- [ ] Deployed, domain set, `NEXT_PUBLIC_SITE_URL` set
+- [ ] `lint`, `tsc` and `npm run build` pass
+- [ ] `NEXT_PUBLIC_SITE_URL` in `pages.yml` set to your address
+- [ ] Settings → Pages → Source set to GitHub Actions
+- [ ] Optional: `PORTFOLIO_GITHUB_TOKEN` secret added and mapped in the workflow
 
 ## License
 
