@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Rebuild daily so the GitHub activity section stays current.
+  # Refresh the fallback for visitors without JavaScript; browsers fetch live data.
   schedule:
     - cron: "17 3 * * *"
 

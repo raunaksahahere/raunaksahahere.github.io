@@ -150,12 +150,23 @@ The palette and type are small on purpose.
 
 ## 8. GitHub activity
 
-`src/lib/github.ts` fetches your public profile, repositories and events from the GitHub API
-**when the site is built**. The static site is a snapshot, so the deploy workflow rebuilds it on every
-push and once a day to keep these numbers fresh.
+The activity section fetches public GitHub data **in the visitor's browser** when the page opens,
+then every five minutes while the tab is visible. Returning to the tab or reconnecting also checks
+for updates if the next refresh is due. No site rebuild is needed for new public activity.
 
-It works without a token, but a token raises the API rate limit and enables the full-year
-contribution calendar (that part of the API needs a token):
+`src/lib/github-public.ts` reads repositories directly for **Last pushed** and public events for the
+feed and 28-day chart. GitHub's events API can lag by 30 seconds to six hours; private work does not
+appear. Repository push times can update before those events arrive. Dates use India time, while
+the daily chart uses UTC days.
+
+`src/lib/github.ts` also saves a build-time snapshot for the initial render. If a live request fails,
+the section keeps the previous data, displays its timestamp and retries automatically. It honours
+GitHub's polling interval and rate-limit retry headers. Browser requests are unauthenticated and
+subject to GitHub's public API limits (normally 60 requests per hour per visitor IP).
+
+It works without a token. An optional **build-only** token raises the build's API rate limit and
+enables the full-year contribution calendar, labelled with its snapshot date. This token is never
+sent to the browser and does not change the browser's public API limits:
 
 1. Create a fine-grained token at https://github.com/settings/tokens with no permissions.
 2. In your repository, go to **Settings → Secrets and variables → Actions** and add it as a secret
@@ -164,8 +175,8 @@ contribution calendar (that part of the API needs a token):
    `env: { GITHUB_TOKEN: ${{ secrets.PORTFOLIO_GITHUB_TOKEN }} }`.
    For local builds, put `GITHUB_TOKEN=...` in `.env.local`.
 
-If GitHub doesn't answer during the build, the section says so rather than showing numbers. That
-behaviour is intentional. Keep it.
+If GitHub doesn't answer during the build, the browser still tries to load live data. If neither
+request succeeds, the section links to the real GitHub profile rather than showing invented numbers.
 
 ## 9. Check before you publish
 
@@ -196,7 +207,7 @@ The repository includes `.github/workflows/pages.yml`, which builds the site and
 4. Open `https://<you>.github.io/`.
 
 The workflow runs on every push to `main`, on manual trigger, and daily at 03:17 UTC to refresh the
-GitHub activity section.
+fallback snapshot. Live activity updates independently of that schedule.
 
 **Your public URL:** the workflow sets `NEXT_PUBLIC_SITE_URL: https://<you>.github.io`. Change it there
 if you use a different address. It's used for the sitemap, canonical links and share previews.
@@ -229,7 +240,8 @@ src/
     site.ts            identity, links, resume, nav
     projects.ts        your projects and which ones are featured
     toolbox.ts         your technologies
-  lib/github.ts        build-time GitHub data
+  lib/github.ts        build-time fallback and optional authenticated calendar
+  lib/github-public.ts public GitHub fetching shared by the build and browser
 public/
   projects/            screenshots (WebP)
   resume/              your resume PDF

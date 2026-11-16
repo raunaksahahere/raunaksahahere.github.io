@@ -48,8 +48,8 @@ export default function Home() {
               </>
             }
           >
-            Pulled from GitHub&apos;s public API and cached for an hour. If GitHub doesn&apos;t answer, this section
-            says so instead of guessing.
+            Checked directly with GitHub when you open this page, then every five minutes while you&apos;re here.
+            Public activity only; GitHub&apos;s event feed can lag behind recent pushes.
           </SectionHeading>
           <Suspense fallback={<GitHubActivitySkeleton />}>
             <GitHubActivity />
