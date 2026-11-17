@@ -101,7 +101,7 @@ export function Nav() {
                     onFocus={() => setHovered(id)}
                     onBlur={() => setHovered(null)}
                     aria-current={currentActive === id ? "location" : undefined}
-                    className="relative z-10 block rounded-full px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink aria-[current=location]:text-ink"
+                    className="relative z-10 block rounded-full px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink aria-[current=location]:text-ink lg:px-4"
                   >
                     {link.label}
                   </Link>

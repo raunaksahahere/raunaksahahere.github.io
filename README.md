@@ -206,8 +206,59 @@ The repository includes `.github/workflows/pages.yml`, which builds the site and
 3. Push to `main` (or run the workflow from the Actions tab). The first deploy takes a minute or two.
 4. Open `https://<you>.github.io/`.
 
-The workflow runs on every push to `main`, on manual trigger, and daily at 03:17 UTC to refresh the
-fallback snapshot. Live activity updates independently of that schedule.
+The workflow runs on every push to `main`, on manual trigger, and hourly at minute 17 to refresh
+Medium and GitHub fallback snapshots. Live browser refreshes update both sections independently of that schedule.
+
+### Medium blog section
+
+The home page's `#blog` section shows the recent stories available in the RSS feed from
+`https://medium.com/@raunaksaha22`, linking to the original articles on Medium.
+With two or more stories, a wide rectangular card is centred at full opacity, with
+complete, smaller dimmed cards at either side, all fitted within the screen. On narrow
+screens, the complete side cards sit below the main card to keep its text readable.
+The carousel moves continuously right to left (one card every eight seconds),
+with no hold between posts, and loops seamlessly.
+Hovering anywhere over the carousel or focusing it with the keyboard pauses automatic motion.
+Mouse clicks on navigation arrows do not leave autoplay paused: it resumes when the
+pointer leaves the carousel. Keyboard focus continues to pause it until focus moves away.
+Previous/next arrows move one card in either direction; a pause/play control is available
+for touch users. Reduced-motion preferences disable automatic scrolling. A single story
+uses the featured layout with disabled navigation arrows. RSS contains recent stories,
+not necessarily a complete archive of every post. Titles, dates, excerpts,
+topics and cover images come from the actual RSS feed, not manually maintained cards.
+
+`npm run build` first runs `scripts/sync-medium.py` (Python 3, standard library only).
+It fetches `https://medium.com/feed/@raunaksaha22` and writes `public/medium-posts.json`.
+The site renders that snapshot into static HTML, so stories also appear without JavaScript.
+On **every page opening**, the browser requests the current profile feed through
+`https://api.rss2json.com/v1/api.json?rss_url=…`. Medium's RSS response does not provide
+the browser access needed by this static GitHub Pages site, so the converter supplies
+a CORS-compatible JSON response. The browser checks again every five minutes while
+visible, on return to the tab if a refresh is due, and on restoration from the browser's
+back/forward cache. New posts do not need a site rebuild or Git commit.
+
+This uses rss2json's public, keyless API and depends on its availability, caching and
+rate limits. Requests carry only the public RSS URL, with credentials omitted.
+The tested endpoint advertises a 900-second cache lifetime; Medium can also cache RSS.
+A new page opening always requests the feed, but newly published posts may still take
+time to appear upstream. Free API responses default to ten entries; RSS is a recent
+feed, not a complete historical archive. A cached response older than the latest
+already-rendered story does not replace it.
+
+If Medium fails to respond, the sync script preserves the previous snapshot and logs
+a warning. Actions caches successful snapshots between builds; the checked-in snapshot
+is the fallback when no cache exists. If the live converter request fails or times out,
+the browser tries the same-origin `medium-posts.json` and otherwise retains the rendered
+cards. The hourly workflow keeps that no-JavaScript/offline fallback current; GitHub
+Actions schedules can be delayed or disabled after repository inactivity.
+Cover-image failures show a simple reading illustration.
+No story HTML is embedded, and preview links and image URLs are restricted to HTTPS Medium domains.
+
+For local development, run `npm run dev`; the browser fetches the live feed on opening
+the page, just as it does in production. `npm run sync:medium` refreshes the saved fallback
+on demand. No polling process or API key is required on the development machine.
+To test a saved feed without network access:
+`python3 scripts/sync-medium.py --input /path/to/feed.xml`.
 
 **Your public URL:** the workflow sets `NEXT_PUBLIC_SITE_URL: https://<you>.github.io`. Change it there
 if you use a different address. It's used for the sitemap, canonical links and share previews.

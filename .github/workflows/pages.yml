@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Refresh the fallback for visitors without JavaScript; browsers fetch live data.
+  # Refresh Medium RSS and the no-JavaScript GitHub fallback every hour.
   schedule:
-    - cron: "17 3 * * *"
+    - cron: "17 * * * *"
 
 permissions:
   contents: read
@@ -32,6 +32,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Preserve the last successful RSS snapshot if Medium is unavailable.
+      - name: Restore Medium feed snapshot
+        uses: actions/cache@v4
+        with:
+          path: public/medium-posts.json
+          key: medium-feed-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: medium-feed-
 
       - name: Build static site
         run: npm run build

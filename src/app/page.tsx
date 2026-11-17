@@ -5,6 +5,7 @@ import { About } from "@/components/sections/about";
 import { Toolbox } from "@/components/sections/toolbox";
 import { GitHubActivity, GitHubActivitySkeleton } from "@/components/sections/activity";
 import { Contact } from "@/components/sections/contact";
+import { Blog } from "@/components/sections/blog";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { featuredProjects } from "@/data/projects";
 
@@ -57,6 +58,7 @@ export default function Home() {
         </div>
       </section>
 
+      <Blog />
       <Contact />
     </>
   );

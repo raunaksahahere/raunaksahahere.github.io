@@ -142,3 +142,26 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Complete side cards sit below the readable main card on narrow screens. */
+.blog-carousel-stage {
+  --story-width: min(640px, calc(100vw - 48px));
+  --story-side-scale: 0.42;
+  --story-shift: calc(var(--story-width) * 0.21 + 10px);
+  --story-drop: 481.5px;
+}
+.blog-carousel-stage > div {
+  height: 960px;
+}
+
+@media (min-width: 1100px) {
+  .blog-carousel-stage {
+    --story-width: min(960px, calc((100vw - 48px) * 0.56));
+    --story-side-scale: 0.36;
+    --story-shift: calc(var(--story-width) * 0.68 + 20px);
+    --story-drop: 0px;
+  }
+  .blog-carousel-stage > div {
+    height: 550px;
+  }
+}

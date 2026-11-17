@@ -1,0 +1,30 @@
+{
+  "profileUrl": "https://medium.com/@raunaksaha22",
+  "fetchedAt": "2026-11-17T18:01:01.835950+00:00",
+  "posts": [
+    {
+      "title": "When Your Teammate Brings an AI Agent to Pair Programming",
+      "url": "https://medium.com/@raunaksaha22/when-your-teammate-brings-an-ai-agent-to-pair-programming-d90d041534bf",
+      "publishedAt": "2026-11-17T17:59:49+00:00",
+      "excerpt": "One developer might be using Claude to implement a feature while another asks Codex to write tests. Both agents can produce useful work, but coordinating their changes introduces questions that a shared editor alone cannot answer.",
+      "thumbnail": "https://cdn-images-1.medium.com/max/1024/1*X4CJHN88HikhJ542RDWjpg.png",
+      "tags": [
+        "open source",
+        "software development",
+        "developer tools"
+      ]
+    },
+    {
+      "title": "Someone Else’s Engineering Problem Could Be Your Next Great Project",
+      "url": "https://medium.com/@raunaksaha22/someone-elses-engineering-problem-could-be-your-next-great-project-9618062b66b7",
+      "publishedAt": "2026-11-17T17:04:26+00:00",
+      "excerpt": "Finding a project idea takes more time than I initially expect. There are plenty of suggestions online, but choosing something useful requires understanding the problem well enough to explain who faces it, what they currently do about…",
+      "thumbnail": "https://cdn-images-1.medium.com/max/1024/1*bT4BCFPm37z9CeNhmiYXuA.png",
+      "tags": [
+        "software engineering",
+        "programming",
+        "side project"
+      ]
+    }
+  ]
+}

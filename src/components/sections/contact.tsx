@@ -66,7 +66,7 @@ export function Contact() {
         <div className="grid items-center gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-8">
             <p className="mb-6 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-paper/70">
-              <span className="rounded-full border border-paper/80 px-2 py-0.5 text-paper">05</span>
+              <span className="rounded-full border border-paper/80 px-2 py-0.5 text-paper">06</span>
               Contact
             </p>
             <h2
