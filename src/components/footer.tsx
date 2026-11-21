@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { site } from "@/data/site";
+import { MEDIUM_PROFILE } from "@/lib/medium";
 import { RobotMark } from "./illustrations/robot-mark";
 
 export function Footer() {
@@ -21,6 +22,7 @@ export function Footer() {
           <li><a className="hover:text-blue" href={site.socials.github} target="_blank" rel="noreferrer">GitHub</a></li>
           <li><a className="hover:text-blue" href={site.socials.youtube} target="_blank" rel="noreferrer">More demos on YouTube</a></li>
           <li><a className="hover:text-blue" href={site.socials.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
+          <li><a className="hover:text-blue" href={MEDIUM_PROFILE} target="_blank" rel="noreferrer">Medium</a></li>
           <li><a className="hover:text-blue" href={`mailto:${site.email}`}>Email</a></li>
           <li><a className="hover:text-blue" href="#main">Back to top ↑</a></li>
         </ul>
