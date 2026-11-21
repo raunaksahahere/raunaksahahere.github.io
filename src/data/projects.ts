@@ -110,6 +110,50 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "detloop",
+    name: "Detloop",
+    category: "Developer tools",
+    tagline: "Find timing bugs in Python asyncio services and replay a failing run from its seed.",
+    summary:
+      "Detloop runs asyncio tests with a virtual clock, seeded scheduling and a simulated network. It records the decisions behind a failure so you can replay the run, reduce the fault sequence and inspect the events in an offline report.",
+    problem:
+      "Distributed asyncio tests can pass hundreds of times before a delayed message or a node crash exposes a race. Finding the bug is only half the job. To diagnose it, you need to recreate the order of events that caused it.",
+    features: [
+      "Explore a range of seeds from pytest or the CLI, with simulated message delays, network partitions and node crashes.",
+      "Check invariants during a run and detect inconsistencies such as stale reads with a bounded linearizability checker.",
+      "Replay a saved failure, shrink the fault sequence and open a self-contained HTML report with node timelines and operation history.",
+    ],
+    stack: ["Python", "asyncio", "pytest"],
+    repo: gh("detloop"),
+    links: [
+      { label: "Install from PyPI", href: "https://pypi.org/project/detloop/" },
+      { label: "Read the benchmarks", href: `${gh("detloop")}/blob/main/docs/BENCHMARKS.md` },
+    ],
+    status: "Alpha",
+    accent: "lime",
+    preview: {
+      kind: "image",
+      src: "/projects/detloop.webp",
+      alt: "Detloop's lost-ack report shows the node crash, a one-way network partition and the operation history that failed the linearizability check.",
+      width: 1300,
+      height: 1180,
+      frame: "browser",
+    },
+    howItWorks: [
+      "A custom asyncio event loop runs standard tasks, futures and streams. When no callbacks are runnable, the virtual clock jumps to the next timer.",
+      "Each simulated node keeps asyncio's callback order. Seeded decisions choose which node runs next and control network timing, workload randomness and faults.",
+      "A failing run writes a trace and a replay manifest. Exact replay checks the recorded decisions for divergence. The shrinker reruns candidates and keeps a simpler sequence when it preserves the failure signature.",
+    ],
+    decisions: [
+      { title: "Keep real I/O outside the simulation", body: "Detloop rejects documented sources of nondeterminism such as real sockets, threads and TLS. Replay depends on the code, configuration and Python minor version." },
+      { title: "Give incomplete runs their own outcome", body: "A run that hits a budget or exceeds the checker's search limit is marked incomplete, so CI can distinguish it from a passing run." },
+    ],
+    evidence: [
+      "In the bundled Raft-style KV demo on CPython 3.12, a planted split-brain bug failed on 16 of 300 seeds. Seed 17 replayed with an identical trace, and the corrected implementation passed all 300 seeds.",
+      "The shrinker reduced the demo's lost-ack failure from three scheduled faults to one while preserving its failure signature.",
+    ],
+  },
+  {
     slug: "kavach-pay",
     name: "Kavach Pay",
     category: "Fintech & security",
@@ -439,18 +483,6 @@ export const projects: Project[] = [
 
   /* ---------------------------------------------------------------- archive */
   {
-    slug: "detloop",
-    name: "detloop",
-    category: "Developer tools",
-    tagline: "Find timing bugs in Python asyncio services and replay a failing run from its seed.",
-    summary:
-      "Runs asyncio tests with a virtual clock and a simulated network that can drop messages or isolate nodes. When a test fails, detloop can shrink the fault sequence and show it in an offline timeline.",
-    stack: ["Python", "asyncio", "pytest"],
-    repo: gh("detloop"),
-    status: "Alpha",
-    accent: "lime",
-  },
-  {
     slug: "xbrl-studio",
     name: "AI XBRL Studio",
     category: "Applied AI",
@@ -602,11 +634,12 @@ export const projects: Project[] = [
 /**
  * Manually curated "Selected work", in display order.
  * The home page lays these out in an editorial sequence:
- *   [0] large spread, [1] reversed spread, [2..4] terminal trio,
- *   [5..6] side-by-side duo, [7..] compact rows.
+ *   [0..2] alternating spreads, [3..5] terminal trio,
+ *   [6..7] side-by-side duo, [8..] compact rows.
  */
 export const featuredOrder = [
   "codemeet",
+  "detloop",
   "kavach-pay",
   "parity",
   "plantwin",
