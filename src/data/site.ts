@@ -1,6 +1,5 @@
 /**
- * Site-wide configuration. Every link here was verified against Raunak's
- * public GitHub profile (github.com/raunaksahahere).
+ * Site-wide configuration and public profiles.
  */
 export const site = {
   name: "Raunak Saha",
@@ -24,6 +23,7 @@ export const site = {
   socials: {
     github: "https://github.com/raunaksahahere",
     linkedin: "https://www.linkedin.com/in/raunak-saha-33aa46406/",
+    youtube: "https://www.youtube.com/@raunaksahahere",
   },
 } as const;
 

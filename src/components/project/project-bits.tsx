@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Globe } from "lucide-react";
+import { ArrowUpRight, Globe, Play } from "lucide-react";
 import type { Accent, Project } from "@/data/projects";
 import { GitHubIcon } from "../ui/icons";
 
@@ -66,6 +66,14 @@ export function ProjectLinks({ project, caseStudy = true }: { project: Project; 
         >
           <Globe className="size-4" aria-hidden /> Live<span className="sr-only"> site for {project.name}</span>
         </a>
+      ) : null}
+      {project.youtubeShortId ? (
+        <Link
+          href={caseStudy ? `/projects/${project.slug}#demo` : "#demo"}
+          className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-paper px-4 py-2 text-sm font-semibold transition-colors hover:bg-sand"
+        >
+          <Play className="size-4" aria-hidden /> Watch demo<span className="sr-only"> for {project.name}</span>
+        </Link>
       ) : null}
     </div>
   );

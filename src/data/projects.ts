@@ -49,6 +49,7 @@ export type Project = {
   stack: string[];
   repo: string;
   live?: string;
+  youtubeShortId?: string;
   /** Extra verified links (demo video, docs). */
   links?: { label: string; href: string }[];
   /** Status as stated by the repository. */
@@ -66,10 +67,13 @@ export type Project = {
 
 const gh = (repo: string) => `https://github.com/raunaksahahere/${repo}`;
 
+export const youtubeShortUrl = (id: string) => `https://www.youtube.com/shorts/${id}`;
+
 export const projects: Project[] = [
   {
     slug: "codemeet",
     name: "CodeMeet",
+    youtubeShortId: "m-Mwb8jSyVA",
     category: "Developer tools",
     tagline: "Pair-program with your team and your AI agents, in VS Code or the terminal.",
     summary:
@@ -112,6 +116,7 @@ export const projects: Project[] = [
   {
     slug: "detloop",
     name: "Detloop",
+    youtubeShortId: "8ugFwQOOrQQ",
     category: "Developer tools",
     tagline: "Find timing bugs in Python asyncio services and replay a failing run from its seed.",
     summary:
@@ -197,6 +202,7 @@ export const projects: Project[] = [
   {
     slug: "parity",
     name: "Parity",
+    youtubeShortId: "OOgO_8i89uo",
     category: "AI & ML infrastructure",
     tagline: "Statistical testing for LLM endpoints: is the server really running those weights?",
     summary:
@@ -298,6 +304,7 @@ export const projects: Project[] = [
   {
     slug: "cfgcanary",
     name: "cfgcanary",
+    youtubeShortId: "1szqd9I5GS0",
     category: "Developer tools",
     tagline: "Progressive delivery for configuration: validate, canary, promote and roll back config like code.",
     summary:

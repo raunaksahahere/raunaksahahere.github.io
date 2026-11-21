@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Play } from "lucide-react";
 import { HeroScene } from "../illustrations/hero-scene";
 import { Magnetic } from "../ui/magnetic";
 import { GitHubIcon, LinkedInIcon } from "../ui/icons";
@@ -72,6 +72,7 @@ export function Hero({ ticker }: { ticker: TickerItem[] }) {
               {[
                 { href: site.socials.github, label: "GitHub", icon: <GitHubIcon size={19} />, ext: true },
                 { href: site.socials.linkedin, label: "LinkedIn", icon: <LinkedInIcon size={18} />, ext: true },
+                { href: site.socials.youtube, label: "YouTube", icon: <Play size={19} />, ext: true },
                 { href: `mailto:${site.email}`, label: "Email", icon: <Mail className="size-[19px]" aria-hidden />, ext: false },
               ].map((s) => (
                 <Magnetic key={s.label} strength={0.4}>

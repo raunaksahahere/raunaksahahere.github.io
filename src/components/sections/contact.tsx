@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Check, Copy, Mail } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Mail, Play } from "lucide-react";
 import { site } from "@/data/site";
 import { Magnetic } from "../ui/magnetic";
 import { Reveal } from "../ui/reveal";
@@ -114,6 +114,7 @@ export function Contact() {
               {[
                 { href: site.socials.github, label: "GitHub", handle: `@${site.githubUser}`, icon: <GitHubIcon size={22} /> },
                 { href: site.socials.linkedin, label: "LinkedIn", handle: "Raunak Saha", icon: <LinkedInIcon size={22} /> },
+                { href: site.socials.youtube, label: "YouTube", handle: "@raunaksahahere", icon: <Play size={22} /> },
               ].map((s) => (
                 <li key={s.label}>
                   <a

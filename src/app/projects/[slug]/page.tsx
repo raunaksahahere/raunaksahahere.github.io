@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { featuredOrder, featuredProjects, getProject, isFeatured } from "@/data/projects";
 import { ProjectPreview } from "@/components/project/preview";
+import { ProjectShort } from "@/components/project/project-short";
 import { CategoryChip, ProjectLinks } from "@/components/project/project-bits";
 import { Reveal } from "@/components/ui/reveal";
 import { Sparkle } from "@/components/illustrations/sparkle";
@@ -60,16 +61,21 @@ async function CaseStudy({ params }: { params: PageProps<"/projects/[slug]">["pa
         </div>
       </header>
 
-      {project.preview ? (
+      {project.preview || project.youtubeShortId ? (
         <Reveal className="mx-auto mt-14 max-w-6xl px-5 sm:px-8">
-          <div
-            className={`rounded-[32px] border-2 border-ink p-4 sm:p-10 ${
-              project.accent === "blue" ? "bg-blue" : project.accent === "orange" ? "bg-orange" : "bg-lime"
-            }`}
-          >
-            <div className={project.preview.kind === "image" && project.preview.frame === "plain" ? "mx-auto max-w-md" : "mx-auto max-w-4xl"}>
-              <ProjectPreview preview={project.preview} url={project.live} priority sizes="(min-width: 1024px) 896px, 100vw" />
-            </div>
+          <div className={project.preview && project.youtubeShortId ? "grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_14rem]" : undefined}>
+            {project.preview ? (
+              <div
+                className={`min-w-0 rounded-[32px] border-2 border-ink p-4 sm:p-10 ${
+                  project.accent === "blue" ? "bg-blue" : project.accent === "orange" ? "bg-orange" : "bg-lime"
+                }`}
+              >
+                <div className={project.preview.kind === "image" && project.preview.frame === "plain" ? "mx-auto max-w-md" : "mx-auto max-w-4xl"}>
+                  <ProjectPreview preview={project.preview} url={project.live} priority sizes="(min-width: 1024px) 896px, 100vw" />
+                </div>
+              </div>
+            ) : null}
+            {project.youtubeShortId ? <ProjectShort id={project.youtubeShortId} name={project.name} /> : null}
           </div>
         </Reveal>
       ) : null}

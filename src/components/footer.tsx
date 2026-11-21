@@ -19,6 +19,7 @@ export function Footer() {
         <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
           <li><Link className="hover:text-blue" href="/projects">All projects</Link></li>
           <li><a className="hover:text-blue" href={site.socials.github} target="_blank" rel="noreferrer">GitHub</a></li>
+          <li><a className="hover:text-blue" href={site.socials.youtube} target="_blank" rel="noreferrer">More demos on YouTube</a></li>
           <li><a className="hover:text-blue" href={site.socials.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
           <li><a className="hover:text-blue" href={`mailto:${site.email}`}>Email</a></li>
           <li><a className="hover:text-blue" href="#main">Back to top ↑</a></li>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { projects, isFeatured } from "@/data/projects";
+import { projects, isFeatured, youtubeShortUrl } from "@/data/projects";
 import { ProjectIndex } from "@/components/project/project-index";
 
 export const metadata: Metadata = {
@@ -18,6 +18,7 @@ export default function ProjectsPage() {
     stack: p.stack,
     repo: p.repo,
     live: p.live,
+    demoUrl: p.youtubeShortId ? youtubeShortUrl(p.youtubeShortId) : undefined,
     status: p.status,
     accent: p.accent,
     featured: isFeatured(p.slug),

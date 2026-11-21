@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { ArrowUpRight, Download, Menu, X } from "lucide-react";
+import { ArrowUpRight, Download, Menu, X, Play } from "lucide-react";
 import { ResumeLink } from "./resume-link";
 import { navLinks, site } from "@/data/site";
 import { GitHubIcon, LinkedInIcon } from "./ui/icons";
@@ -190,7 +190,7 @@ export function Nav() {
               >
                 <Download className="size-5" aria-hidden /> Download resume (PDF)
               </ResumeLink>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
               <a
                 href={site.socials.github}
                 target="_blank"
@@ -208,6 +208,15 @@ export function Nav() {
                 aria-label="LinkedIn"
               >
                 <LinkedInIcon />
+              </a>
+              <a
+                href={site.socials.youtube}
+                target="_blank"
+                rel="noreferrer"
+                className="grid size-12 place-items-center rounded-full border-2 border-ink bg-paper"
+                aria-label="YouTube"
+              >
+                <Play size={20} aria-hidden />
               </a>
               <a
                 href={`mailto:${site.email}`}

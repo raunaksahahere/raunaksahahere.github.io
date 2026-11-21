@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Globe } from "lucide-react";
+import { ArrowUpRight, Globe, Play } from "lucide-react";
 import type { Accent, Category } from "@/data/projects";
 import { GitHubIcon } from "../ui/icons";
 
@@ -15,6 +15,7 @@ type Item = {
   stack: string[];
   repo: string;
   live?: string;
+  demoUrl?: string;
   status: string;
   accent: Accent;
   featured: boolean;
@@ -114,6 +115,18 @@ export function ProjectIndex({ items }: { items: Item[] }) {
                       className="grid size-9 place-items-center rounded-full border-2 border-ink bg-lime hover:bg-[#b5e01f]"
                     >
                       <Globe className="size-4" aria-hidden />
+                    </a>
+                  ) : null}
+                  {p.demoUrl ? (
+                    <a
+                      href={p.demoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Watch ${p.name} demo on YouTube`}
+                      title="Watch demo"
+                      className="grid size-9 place-items-center rounded-full border-2 border-ink bg-paper transition-colors hover:bg-sand"
+                    >
+                      <Play className="size-4" aria-hidden />
                     </a>
                   ) : null}
                 </div>
