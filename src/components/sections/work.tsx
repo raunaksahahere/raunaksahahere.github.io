@@ -173,10 +173,10 @@ function Row({ project, index }: { project: Project; index: number }) {
 
 export function Work() {
   const p = featuredProjects;
-  const spreads = p.slice(0, 2);
-  const trio = p.slice(2, 5);
-  const duo = p.slice(5, 7);
-  const rows = p.slice(7);
+  const spreads = p.slice(0, 3);
+  const trio = p.slice(3, 6);
+  const duo = p.slice(6, 8);
+  const rows = p.slice(8);
 
   return (
     <section id="work" aria-labelledby="work-title" className="relative py-20 sm:py-28">
@@ -214,7 +214,7 @@ export function Work() {
             </Reveal>
             <div className="grid gap-6 md:grid-cols-2">
               {trio.map((project, i) => (
-                <TerminalCard key={project.slug} project={project} index={i + 2} wide={i === 0} />
+                <TerminalCard key={project.slug} project={project} index={i + spreads.length} wide={i === 0} />
               ))}
             </div>
           </div>
@@ -223,7 +223,7 @@ export function Work() {
         {duo.length > 0 ? (
           <div className="mt-28 grid gap-16 sm:mt-36 md:grid-cols-2 md:gap-10">
             {duo.map((project, i) => (
-              <ShotCard key={project.slug} project={project} index={i + 5} offset={i === 1} />
+              <ShotCard key={project.slug} project={project} index={i + spreads.length + trio.length} offset={i === 1} />
             ))}
           </div>
         ) : null}
@@ -231,7 +231,7 @@ export function Work() {
         {rows.length > 0 ? (
           <div className="mt-28 border-b-2 border-ink sm:mt-36">
             {rows.map((project, i) => (
-              <Row key={project.slug} project={project} index={i + 7} />
+              <Row key={project.slug} project={project} index={i + spreads.length + trio.length + duo.length} />
             ))}
           </div>
         ) : null}
