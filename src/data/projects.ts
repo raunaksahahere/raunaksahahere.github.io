@@ -439,6 +439,18 @@ export const projects: Project[] = [
 
   /* ---------------------------------------------------------------- archive */
   {
+    slug: "detloop",
+    name: "detloop",
+    category: "Developer tools",
+    tagline: "Find timing bugs in Python asyncio services and replay a failing run from its seed.",
+    summary:
+      "Runs asyncio tests with a virtual clock and a simulated network that can drop messages or isolate nodes. When a test fails, detloop can shrink the fault sequence and show it in an offline timeline.",
+    stack: ["Python", "asyncio", "pytest"],
+    repo: gh("detloop"),
+    status: "Alpha",
+    accent: "lime",
+  },
+  {
     slug: "xbrl-studio",
     name: "AI XBRL Studio",
     category: "Applied AI",
